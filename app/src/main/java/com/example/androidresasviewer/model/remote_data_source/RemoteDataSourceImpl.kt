@@ -13,6 +13,16 @@ class RemoteDataSourceImpl @Inject constructor(
             throw ResasException()
         }
     }
+
+    override suspend fun getComposition(prefCode: Int): CompositionResult {
+        val response = client.getComposition(prefCode)
+        if (response.isSuccessful) {
+            return response.body() ?: throw ResasException()
+        } else {
+            throw ResasException()
+        }
+    }
+
 }
 
 class ResasException: Throwable()

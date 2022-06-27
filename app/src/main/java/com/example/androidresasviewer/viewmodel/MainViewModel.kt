@@ -1,5 +1,6 @@
 package com.example.androidresasviewer.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 
 import androidx.compose.runtime.getValue
@@ -20,13 +21,23 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-//            prefectures.addAll(resasRepository.getPrefectureList())
+            prefectures.addAll(resasRepository.getPrefectureList())
         }
     }
 
-    fun onUpdatePrefecture() {
-        viewModelScope.launch {
-            prefectures.addAll(resasRepository.getPrefectureList())
+    fun getPrefectureChecked(prefectureComposition: PrefectureComposition): Boolean =
+        prefectureComposition.compositionData != null
+
+    fun onChangeChecked(toChecked: Boolean, index: Int) {
+        if (toChecked) {
+            viewModelScope.launch {
+                prefectures[index] = resasRepository.getComposition(prefectures[index])
+            }
+        } else {
+            viewModelScope.launch {
+                prefectures[index] = resasRepository.deleteComposition(prefectures[index])
+            }
         }
+        Log.d("北海道", prefectures[index].toString())
     }
 }

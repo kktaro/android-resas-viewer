@@ -12,6 +12,6 @@ interface ResasApiClient {
     suspend fun getPrefectures(): Response<Prefectures>
 
     @Headers("x-api-key: ${BuildConfig.RESAS_API_KEY}")
-    @GET("api/v1/population/composition/perYear")
-    suspend fun getComposition(@Query("prefCode") prefectureCode: String )
+    @GET("api/v1/population/composition/perYear?cityCode=-")
+    suspend fun getComposition(@Query("prefCode") prefectureCode: Int): Response<CompositionResult>
 }
