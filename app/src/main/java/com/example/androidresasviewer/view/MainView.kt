@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.androidresasviewer.model.repository.ResasRepositoryImpl
 import com.example.androidresasviewer.model.repository.ResasRepositoryModule
 import com.example.androidresasviewer.view.component.molecule.LabelledCheckbox
+import com.example.androidresasviewer.view.component.organism.PopulationGraph
 import com.example.androidresasviewer.viewmodel.MainViewModel
 import java.util.*
 
@@ -32,39 +33,36 @@ fun MainView(viewModel: MainViewModel) {
             .fillMaxWidth(),
         topBar = {
             CenterAlignedTopAppBar(
-                title = {Text("APP")},
+                title = { Text("APP") },
             )
         },
     ) {
         Box(modifier = Modifier.padding(it))
         {
-
-
+            Column(modifier = Modifier.fillMaxSize()) {
                 LazyVerticalGrid(
-                    columns = GridCells.Adaptive(128.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    columns = GridCells.Adaptive(112.dp),
+                    verticalArrangement = Arrangement.spacedBy(1.dp),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
                 ) {
                     items(viewModel.prefectures.size) {
                         Row {
                             val target = viewModel.prefectures[it]
                             LabelledCheckbox(
                                 checked = viewModel.getPrefectureChecked(target),
-                                onCheckedChange = { checked -> viewModel.onChangeChecked(checked, it) },
+                                onCheckedChange = { checked ->
+                                    viewModel.onChangeChecked(
+                                        checked,
+                                        it
+                                    )
+                                },
                                 text = target.name.value,
                             )
                         }
                     }
-                    item {
-                        Text(text =
-                        if (viewModel.prefectures.isNotEmpty() && viewModel.prefectures[0].compositionData != null)
-                            viewModel.prefectures[0].compositionData!![0].compositionPopulation.toString()
-                        else
-                            "NULL"
-                        )
-                    }
+                }
+                PopulationGraph(data = viewModel.graphData)
             }
-
         }
     }
 }
