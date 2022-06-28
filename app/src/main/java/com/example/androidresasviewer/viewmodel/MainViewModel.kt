@@ -37,6 +37,8 @@ class MainViewModel @Inject constructor(
 
     fun onChangeChecked(toChecked: Boolean, index: Int) {
         if (toChecked) {
+            if (graphData.size >= 6) return
+
             graphDataIndex.add(index)
             viewModelScope.launch {
                 prefectures[index] = resasRepository.getComposition(prefectures[index])
